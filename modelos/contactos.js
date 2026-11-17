@@ -2,10 +2,11 @@
  * Modelo de Mensajes de Contacto - AluGestión
  */
 
-const URL_CONTACTO = './api/datos.php?tabla=contactos&accion=insertar';
+const URL_INSERTAR = './api/datos.php?tabla=contactos&accion=insertar';
+const URL_SELECCIONAR = './api/datos.php?tabla=contactos&accion=seleccionar';
 
 /**
- * Guarda el mensaje del formulario de contacto en MySQL
+ * Guarda el mensaje del formulario de contacto en MySQL (usado desde index.html)
  * @param {FormData|Object} datos 
  * @returns {Promise<Object>}
  */
@@ -19,6 +20,16 @@ export async function enviarContacto(datos) {
         opciones.body = JSON.stringify(datos);
     }
 
-    const res = await fetch(URL_CONTACTO, opciones);
+    const res = await fetch(URL_INSERTAR, opciones);
     return await res.json();
+}
+
+/**
+ * Obtiene todas las consultas enviadas desde la portada pública
+ * @returns {Promise<Array>}
+ */
+export async function obtenerContactos() {
+    const res = await fetch(URL_SELECCIONAR);
+    const data = await res.json();
+    return Array.isArray(data) ? data : (data.datos || data.data || []);
 }

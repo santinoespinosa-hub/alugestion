@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AluGestión - Dashboard Principal</title>
+    <title>AluGestión - Aberturas de Aluminio de Alta Prestación</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -18,7 +18,7 @@
         .bg-overlay {
             position: fixed;
             inset: 0;
-            background: rgba(15, 23, 42, 0.78);
+            background: rgba(15, 23, 42, 0.82);
             z-index: -1;
         }
         .glass-panel {
@@ -30,15 +30,14 @@
         }
         .glass-card {
             background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
             border: 1px solid rgba(255, 255, 255, 0.1);
             transition: all 0.3s ease;
         }
         .glass-card:hover {
-            background: rgba(255, 255, 255, 0.08);
-            border-color: rgba(255, 255, 255, 0.25);
-            transform: translateY(-2px);
+            border-color: rgba(6, 182, 212, 0.45);
+            transform: translateY(-3px);
         }
         .glass-input {
             background: rgba(0, 0, 0, 0.3);
@@ -52,36 +51,30 @@
             box-shadow: 0 0 12px rgba(6, 182, 212, 0.3);
             outline: none;
         }
-        .glow-text-cyan { text-shadow: 0 0 10px rgba(6, 182, 212, 0.6); }
+        .glass-input::placeholder {
+            color: rgba(255, 255, 255, 0.4);
+        }
+        .glow-text-cyan { text-shadow: 0 0 12px rgba(6, 182, 212, 0.6); }
         .glow-cyan { box-shadow: 0 0 15px rgba(6, 182, 212, 0.4); }
-        ::-webkit-scrollbar { width: 6px; height: 6px; }
-        ::-webkit-scrollbar-track { background: rgba(0,0,0,0.2); }
-        ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 4px; }
-        ::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.4); }
         .loader {
             border: 2px solid rgba(255,255,255,0.2);
             border-top-color: #06b6d4;
             border-radius: 50%;
-            width: 1.25rem;
-            height: 1.25rem;
+            width: 1rem;
+            height: 1rem;
             animation: spin 1s linear infinite;
         }
         @keyframes spin { to { transform: rotate(360deg); } }
     </style>
 </head>
-<body class="text-slate-100 h-screen overflow-hidden">
-    
+<body class="text-slate-100 min-h-screen flex flex-col">
+
     <div class="bg-overlay"></div>
 
-    <div id="app-container" class="flex h-screen w-full relative">
-        
-        <!-- Overlay móvil -->
-        <div id="mobile-overlay" class="fixed inset-0 bg-slate-900/80 backdrop-blur-sm z-20 hidden lg:hidden"></div>
-
-        <!-- BARRA LATERAL IZQUIERDA -->
-        <aside id="sidebar" class="w-64 flex-shrink-0 flex flex-col h-full absolute lg:relative z-30 transform -translate-x-full lg:translate-x-0 transition-transform duration-300 ease-in-out glass-panel border-r border-white/10">
-            <!-- Logo -->
-            <div class="h-16 flex items-center px-6 border-b border-white/10 text-white font-bold text-xl tracking-wide gap-3">
+    <!-- BARRA DE NAVEGACIÓN PÚBLICA -->
+    <header class="sticky top-0 z-30 glass-panel border-b border-white/10">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <a href="index.html" class="flex items-center gap-3 text-white font-bold text-xl tracking-wide">
                 <div class="bg-gradient-to-br from-cyan-400 to-blue-600 p-2 rounded-xl glow-cyan">
                     <i class="ph ph-bounding-box text-2xl text-white"></i>
                 </div>
@@ -89,222 +82,222 @@
                     AluGestión
                     <span class="block text-[10px] text-cyan-300 font-normal tracking-normal">Aberturas de Aluminio</span>
                 </div>
-            </div>
+            </a>
 
-            <!-- Menú de Navegación -->
-            <nav class="flex-1 overflow-y-auto py-6 px-3 space-y-2">
-                <a href="index.html" class="nav-item active-nav w-full flex items-center gap-3 px-4 py-3 rounded-xl bg-cyan-500/20 text-cyan-300 border-l-4 border-cyan-400 font-medium transition-all text-left">
-                    <i class="ph ph-squares-four text-xl"></i>
-                    Inicio
-                </a>
-                <a href="clientes.html" class="nav-item w-full flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:bg-white/10 hover:text-white border-l-4 border-transparent transition-all text-left">
-                    <i class="ph ph-users text-xl"></i>
-                    Clientes
-                </a>
-                <a href="presupuestos.html" class="nav-item w-full flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:bg-white/10 hover:text-white border-l-4 border-transparent transition-all text-left">
-                    <i class="ph ph-file-text text-xl"></i>
-                    Presupuestos
-                </a>
-                <a href="ordenes.html" class="nav-item w-full flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:bg-white/10 hover:text-white border-l-4 border-transparent transition-all text-left">
-                    <i class="ph ph-wrench text-xl"></i>
-                    Órdenes de Trabajo
-                </a>
-                <a href="mantenimiento.html" class="nav-item w-full flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:bg-white/10 hover:text-white border-l-4 border-transparent transition-all text-left">
-                    <i class="ph ph-calendar-check text-xl"></i>
-                    Mantenimiento
-                </a>
-                <a href="contactenos.html" class="nav-item w-full flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:bg-white/10 hover:text-white border-l-4 border-transparent transition-all text-left">
-                    <i class="ph ph-chat-circle-dots text-xl"></i>
-                    Contáctenos
-                </a>
-            </nav>
+            <div class="flex items-center gap-6">
+                <nav class="hidden md:flex items-center gap-6 text-sm font-medium text-slate-300">
+                    <a href="#nosotros" class="hover:text-cyan-300 transition-colors">Nosotros</a>
+                    <a href="#servicios" class="hover:text-cyan-300 transition-colors">Servicios y Líneas</a>
+                    <a href="#contactenos" class="hover:text-cyan-300 transition-colors">Contáctenos</a>
+                </nav>
 
-            <!-- Acceso Rápido / Footer Sidebar -->
-            <div class="p-4 border-t border-white/10">
-                <a href="clientes.html?action=nuevo" class="w-full py-2.5 px-4 rounded-xl bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white text-xs font-semibold flex items-center justify-center gap-2 glow-cyan transition-all">
-                    <i class="ph ph-plus-circle text-lg"></i>
-                    + Alta de Cliente
+                <a href="login.html" class="bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white px-4 py-2 rounded-xl text-sm font-semibold flex items-center gap-2 glow-cyan transition-all">
+                    <i class="ph ph-sign-in text-lg"></i>
+                    <span>Iniciar Sesión</span>
                 </a>
             </div>
-        </aside>
-
-        <!-- CONTENIDO PRINCIPAL -->
-        <div class="flex-1 flex flex-col min-w-0 h-full overflow-hidden">
-            
-            <!-- Barra Superior (Header) -->
-            <header class="h-16 glass-panel border-b border-white/10 flex items-center justify-between px-4 lg:px-8 flex-shrink-0 z-10 rounded-none shadow-none">
-                <div class="flex items-center flex-1 gap-4">
-                    <button id="btn-toggle-sidebar" class="lg:hidden text-slate-300 hover:text-white p-2 rounded-lg hover:bg-white/10 transition-colors">
-                        <i class="ph ph-list text-2xl"></i>
-                    </button>
-
-                    <div class="relative w-full max-w-md hidden sm:block">
-                        <i class="ph ph-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-lg"></i>
-                        <input type="text" onkeydown="if(event.key === 'Enter') window.location.href='clientes.html'" placeholder="Buscar clientes, presupuestos, obras..." class="glass-input w-full pl-10 pr-4 py-2 rounded-xl text-sm">
-                    </div>
-                </div>
-
-                <!-- Perfil & Sesión -->
-                <div class="flex items-center gap-4 pl-4">
-                    <button class="text-slate-300 hover:text-cyan-400 transition-colors p-2 rounded-full hover:bg-white/10 relative" title="Notificaciones del sistema">
-                        <i class="ph ph-bell text-xl"></i>
-                        <span class="absolute top-2 right-2 w-2 h-2 bg-amber-500 rounded-full border border-slate-900 shadow-[0_0_8px_rgba(245,158,11,1)]"></span>
-                    </button>
-
-                    <div class="h-8 w-px bg-white/20 mx-1"></div>
-
-                    <!-- Usuario -->
-                    <div class="flex items-center gap-3">
-                        <img id="header-user-avatar" src="https://placehold.co/100x100/0f172a/06b6d4?text=AG" alt="Avatar" class="w-9 h-9 rounded-full object-cover border border-cyan-500/50">
-                        <div class="hidden md:block text-left">
-                            <p id="header-user-name" class="text-sm font-bold text-white leading-tight">Usuario</p>
-                            <p id="header-user-role" class="text-xs text-cyan-300 leading-tight">Administrador</p>
-                        </div>
-                        <button id="btn-logout" class="text-slate-400 hover:text-red-400 p-1.5 rounded-lg hover:bg-white/10 transition-colors" title="Cerrar Sesión">
-                            <i class="ph ph-sign-out text-xl"></i>
-                        </button>
-                    </div>
-                </div>
-            </header>
-
-            <!-- VISTA DEL DASHBOARD -->
-            <main class="flex-1 overflow-y-auto p-6 lg:p-8 relative z-0 space-y-8">
-                
-                <!-- Encabezado del Dashboard -->
-                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                    <div>
-                        <h1 class="text-3xl font-bold text-white glow-text-cyan tracking-tight">Dashboard Principal</h1>
-                        <p class="text-sm text-slate-300 mt-1">Resumen general y métricas en tiempo real de AluGestión.</p>
-                    </div>
-                    <button id="btn-nuevo-cliente-dash" class="bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white px-5 py-2.5 rounded-xl font-medium shadow-lg flex items-center gap-2 transition-all glow-cyan border border-cyan-400/30">
-                        <i class="ph ph-plus-circle text-xl"></i>
-                        + Nuevo Cliente
-                    </button>
-                </div>
-
-                <!-- Tarjetas de Métricas Dinámicas (Desde MySQL) -->
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                    <!-- Tarjeta 1: Presupuestos Pendientes -->
-                    <div class="glass-card p-6 rounded-2xl flex flex-col relative overflow-hidden group">
-                        <div class="absolute top-0 right-0 w-24 h-24 bg-amber-500/20 rounded-full blur-2xl -mr-10 -mt-10 transition-transform group-hover:scale-150"></div>
-                        <div class="flex items-start justify-between mb-4">
-                            <div class="w-12 h-12 rounded-xl bg-amber-500/20 border border-amber-500/30 text-amber-400 flex items-center justify-center text-2xl shadow-[0_0_15px_rgba(245,158,11,0.2)]">
-                                <i class="ph ph-file-text"></i>
-                            </div>
-                            <span class="text-xs px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/30">En revisión</span>
-                        </div>
-                        <p id="stat-presupuestos" class="text-3xl font-bold text-white mb-1">14</p>
-                        <p class="text-sm text-slate-400 font-medium">Presupuestos Pendientes</p>
-                    </div>
-
-                    <!-- Tarjeta 2: Pedidos Activos -->
-                    <div class="glass-card p-6 rounded-2xl flex flex-col relative overflow-hidden group">
-                        <div class="absolute top-0 right-0 w-24 h-24 bg-cyan-500/20 rounded-full blur-2xl -mr-10 -mt-10 transition-transform group-hover:scale-150"></div>
-                        <div class="flex items-start justify-between mb-4">
-                            <div class="w-12 h-12 rounded-xl bg-cyan-500/20 border border-cyan-500/30 text-cyan-400 flex items-center justify-center text-2xl shadow-[0_0_15px_rgba(6,182,212,0.2)]">
-                                <i class="ph ph-wrench"></i>
-                            </div>
-                            <span class="text-xs px-2 py-0.5 rounded-full bg-cyan-500/20 text-cyan-300 border border-cyan-500/30">En fábrica</span>
-                        </div>
-                        <p id="stat-pedidos" class="text-3xl font-bold text-white mb-1">28</p>
-                        <p class="text-sm text-slate-400 font-medium">Pedidos / Órdenes Activas</p>
-                    </div>
-
-                    <!-- Tarjeta 3: Mantenimientos Programados -->
-                    <div class="glass-card p-6 rounded-2xl flex flex-col relative overflow-hidden group">
-                        <div class="absolute top-0 right-0 w-24 h-24 bg-fuchsia-500/20 rounded-full blur-2xl -mr-10 -mt-10 transition-transform group-hover:scale-150"></div>
-                        <div class="flex items-start justify-between mb-4">
-                            <div class="w-12 h-12 rounded-xl bg-fuchsia-500/20 border border-fuchsia-500/30 text-fuchsia-400 flex items-center justify-center text-2xl shadow-[0_0_15px_rgba(217,70,239,0.2)]">
-                                <i class="ph ph-calendar-check"></i>
-                            </div>
-                            <span class="text-xs px-2 py-0.5 rounded-full bg-fuchsia-500/20 text-fuchsia-300 border border-fuchsia-500/30">Próximos</span>
-                        </div>
-                        <p id="stat-mantenimientos" class="text-3xl font-bold text-white mb-1">7</p>
-                        <p class="text-sm text-slate-400 font-medium">Mantenimientos Prog.</p>
-                    </div>
-
-                    <!-- Tarjeta 4: Ingresos Totales -->
-                    <div class="glass-card p-6 rounded-2xl flex flex-col relative overflow-hidden group">
-                        <div class="absolute top-0 right-0 w-24 h-24 bg-emerald-500/20 rounded-full blur-2xl -mr-10 -mt-10 transition-transform group-hover:scale-150"></div>
-                        <div class="flex items-start justify-between mb-4">
-                            <div class="w-12 h-12 rounded-xl bg-emerald-500/20 border border-emerald-500/30 text-emerald-400 flex items-center justify-center text-2xl shadow-[0_0_15px_rgba(16,185,129,0.2)]">
-                                <i class="ph ph-currency-circle-dollar"></i>
-                            </div>
-                            <span class="text-xs px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">Mes en curso</span>
-                        </div>
-                        <p id="stat-ingresos" class="text-3xl font-bold text-white mb-1">$1.2M</p>
-                        <p class="text-sm text-slate-400 font-medium">Ingresos Totales (Mes)</p>
-                    </div>
-                </div>
-
-                <!-- Bloque de Acceso Directo y Clientes Recientes -->
-                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                    
-                    <!-- Tarjeta de Gestión de Clientes -->
-                    <div class="glass-panel p-6 rounded-2xl flex flex-col justify-between">
-                        <div>
-                            <div class="w-12 h-12 rounded-xl bg-cyan-500/20 text-cyan-400 flex items-center justify-center text-2xl mb-4 glow-cyan">
-                                <i class="ph ph-users-three"></i>
-                            </div>
-                            <h2 class="text-xl font-bold text-white mb-2">Módulo de Clientes</h2>
-                            <p class="text-sm text-slate-300 mb-4">Consulta el listado dinámico, da de alta nuevas obras y gestiona bajas lógicas conectadas a MySQL.</p>
-                        </div>
-                        <div class="space-y-3">
-                            <a href="clientes.html" class="w-full py-2.5 px-4 rounded-xl bg-white/10 hover:bg-white/20 text-white text-sm font-medium flex items-center justify-center gap-2 border border-white/10 transition-all">
-                                <i class="ph ph-list-dashes"></i> Ver Todos los Clientes
-                            </a>
-                            <a href="clientes.html?action=nuevo" class="w-full py-2.5 px-4 rounded-xl bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white text-sm font-medium flex items-center justify-center gap-2 glow-cyan transition-all">
-                                <i class="ph ph-user-plus"></i> + Alta de Nuevo Cliente
-                            </a>
-                        </div>
-                    </div>
-
-                    <!-- Tabla de Clientes Recientes de MySQL -->
-                    <div class="lg:col-span-2 glass-panel p-6 rounded-2xl flex flex-col">
-                        <div class="flex items-center justify-between mb-4">
-                            <div>
-                                <h2 class="text-lg font-bold text-white">Clientes Recientes en MySQL</h2>
-                                <p class="text-xs text-slate-400">Últimos registros cargados en la base de datos de AluGestión</p>
-                            </div>
-                            <a href="clientes.html" class="text-xs font-semibold text-cyan-400 hover:text-cyan-300 flex items-center gap-1">
-                                Ver todos <i class="ph ph-arrow-right"></i>
-                            </a>
-                        </div>
-
-                        <div class="overflow-x-auto">
-                            <table class="w-full text-left text-sm whitespace-nowrap">
-                                <thead class="bg-black/30 text-slate-400 font-semibold border-b border-white/10 text-xs">
-                                    <tr>
-                                        <th class="px-6 py-3">Cliente</th>
-                                        <th class="px-6 py-3">CUIT / DNI</th>
-                                        <th class="px-6 py-3">Teléfono</th>
-                                        <th class="px-6 py-3">Estado</th>
-                                        <th class="px-6 py-3 text-right">Acción</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="dashboard-recent-clients" class="divide-y divide-white/5">
-                                    <tr>
-                                        <td colspan="5" class="px-6 py-6 text-center text-slate-400">
-                                            <div class="flex items-center justify-center gap-2">
-                                                <div class="loader"></div>
-                                                <span>Cargando clientes de MySQL...</span>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-
-                </div>
-
-                <div class="h-6"></div>
-            </main>
         </div>
-    </div>
+    </header>
 
-    <!-- Scripts -->
-    <script type="module" src="./controladores/nav-autenticacion.js"></script>
-    <script type="module" src="./controladores/dashboard-controlador.js"></script>
+    <!-- CONTENIDO PRINCIPAL -->
+    <main class="flex-1 max-w-6xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-12 space-y-16">
+
+        <!-- SECCIÓN HERO / PRESENTACIÓN DE LA EMPRESA -->
+        <section id="nosotros" class="glass-panel rounded-3xl p-8 lg:p-12 relative overflow-hidden">
+            <div class="max-w-3xl space-y-6">
+                <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-500/15 border border-cyan-400/30 text-cyan-300 text-xs font-medium">
+                    <i class="ph ph-buildings"></i>
+                    Carpintería de Aluminio y Cerramientos a Medida
+                </span>
+
+                <h1 class="text-3xl sm:text-5xl font-bold text-white tracking-tight leading-tight">
+                    Diseño, fabricación e instalación de <span class="text-cyan-400 glow-text-cyan">aberturas de aluminio</span>
+                </h1>
+
+                <p class="text-base sm:text-lg text-slate-300 leading-relaxed">
+                    En <strong>AluGestión</strong> brindamos soluciones arquitectónicas de alta y media prestación para obras residenciales, comerciales y corporativas. Combinamos perfilería certificada, Doble Vidriado Hermético (DVH) y mano de obra especializada para garantizar aislación térmica, acústica y durabilidad.
+                </p>
+
+                <div class="flex flex-wrap items-center gap-4 pt-2">
+                    <a href="#contactenos" class="bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white px-6 py-3 rounded-xl font-semibold flex items-center gap-2 glow-cyan transition-all">
+                        <i class="ph ph-chat-circle-dots text-xl"></i>
+                        Solicitar Presupuesto
+                    </a>
+                    <a href="#servicios" class="glass-card hover:bg-white/10 text-white px-6 py-3 rounded-xl font-medium flex items-center gap-2">
+                        <i class="ph ph-info text-xl text-cyan-400"></i>
+                        Conocer Nuestras Líneas
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECCIÓN INFORMACIÓN DE LA EMPRESA / SERVICIOS -->
+        <section id="servicios" class="space-y-6">
+            <div class="text-center max-w-2xl mx-auto space-y-2">
+                <h2 class="text-2xl sm:text-3xl font-bold text-white">Nuestras Soluciones y Especialidades</h2>
+                <p class="text-sm text-slate-300">Trabajamos cada proyecto de principio a fin: medición en obra, fabricación en planta y montaje certificado.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="glass-panel p-6 rounded-2xl space-y-3">
+                    <div class="w-12 h-12 rounded-xl bg-cyan-500/20 border border-cyan-400/30 flex items-center justify-center text-cyan-300">
+                        <i class="ph ph-frame-corners text-2xl"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-white">Aberturas de Alta Prestación</h3>
+                    <p class="text-sm text-slate-300 leading-relaxed">
+                        Fabricación en líneas <strong>Aluar Módena, Módena 2, A30 New con RPT</strong> y Herrero tradicional, adaptadas a las exigencias térmicas y estéticas de cada obra.
+                    </p>
+                </div>
+
+                <div class="glass-panel p-6 rounded-2xl space-y-3">
+                    <div class="w-12 h-12 rounded-xl bg-blue-500/20 border border-blue-400/30 flex items-center justify-center text-blue-300">
+                        <i class="ph ph-buildings text-2xl"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-white">Frentes Integrales y DVH</h3>
+                    <p class="text-sm text-slate-300 leading-relaxed">
+                        Cerramientos de grandes luces, piel de vidrio, mamparas y sistemas con <strong>Doble Vidriado Hermético (DVH)</strong> para máximo ahorro energético.
+                    </p>
+                </div>
+
+                <div class="glass-panel p-6 rounded-2xl space-y-3">
+                    <div class="w-12 h-12 rounded-xl bg-emerald-500/20 border border-emerald-400/30 flex items-center justify-center text-emerald-300">
+                        <i class="ph ph-wrench text-2xl"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-white">Colocación y Mantenimiento</h3>
+                    <p class="text-sm text-slate-300 leading-relaxed">
+                        Equipo técnico propio para instalación en obra, regulación de herrajes, cambio de burletes, rodamientos y servicio postventa garantizado.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECCIÓN CONTÁCTENOS -->
+        <section id="contactenos" class="space-y-6">
+            <div>
+                <h2 class="text-2xl sm:text-3xl font-bold text-white glow-text-cyan tracking-tight">Contáctenos y Consultas</h2>
+                <p class="text-sm text-slate-300 mt-1">
+                    Envíanos tu consulta o pedido de cotización. Nuestro equipo comercial se comunicará a la brevedad.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <div class="lg:col-span-2 glass-panel p-6 lg:p-8 rounded-2xl">
+                    <form id="form-contacto" class="space-y-4">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div>
+                                <label for="nombre" class="block text-sm font-medium text-slate-300 mb-1">Nombre y Apellido *</label>
+                                <input type="text" id="nombre" name="nombre" required placeholder="Juan Pérez" class="glass-input w-full px-4 py-2.5 rounded-xl text-sm">
+                            </div>
+                            <div>
+                                <label for="email" class="block text-sm font-medium text-slate-300 mb-1">Correo Electrónico *</label>
+                                <input type="email" id="email" name="email" required placeholder="correo@ejemplo.com" class="glass-input w-full px-4 py-2.5 rounded-xl text-sm">
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div>
+                                <label for="telefono" class="block text-sm font-medium text-slate-300 mb-1">Teléfono</label>
+                                <input type="tel" id="telefono" name="telefono" placeholder="+54 9 341..." class="glass-input w-full px-4 py-2.5 rounded-xl text-sm">
+                            </div>
+                            <div>
+                                <label for="direccion" class="block text-sm font-medium text-slate-300 mb-1">Dirección / Obra</label>
+                                <input type="text" id="direccion" name="direccion" placeholder="Calle y número" class="glass-input w-full px-4 py-2.5 rounded-xl text-sm">
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div>
+                                <label for="localidad" class="block text-sm font-medium text-slate-300 mb-1">Localidad</label>
+                                <input type="text" id="localidad" name="localidad" placeholder="Rosario, Santa Fe..." class="glass-input w-full px-4 py-2.5 rounded-xl text-sm">
+                            </div>
+                            <div>
+                                <label for="provincia" class="block text-sm font-medium text-slate-300 mb-1">Provincia</label>
+                                <input type="text" id="provincia" name="provincia" placeholder="Santa Fe" class="glass-input w-full px-4 py-2.5 rounded-xl text-sm">
+                            </div>
+                        </div>
+
+                        <div>
+                            <label for="mensaje" class="block text-sm font-medium text-slate-300 mb-1">Mensaje o Detalle de Aberturas *</label>
+                            <textarea id="mensaje" name="mensaje" rows="4" required placeholder="Describe las medidas, cantidad de aberturas, tipo de línea (Módena, A30) o consulta de servicio..." class="glass-input w-full px-4 py-3 rounded-xl resize-none text-sm"></textarea>
+                        </div>
+
+                        <div class="pt-4 flex items-center justify-between border-t border-white/10">
+                            <span class="text-xs text-slate-400">Los campos con (*) son obligatorios</span>
+                            <button type="submit" id="btn-enviar-contacto" class="bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white px-6 py-2.5 rounded-xl font-medium shadow-lg flex items-center gap-2 glow-cyan transition-all">
+                                <i class="ph ph-paper-plane-tilt text-lg"></i>
+                                <span id="btn-contacto-text">Enviar Mensaje</span>
+                                <div id="btn-contacto-loader" class="loader hidden"></div>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Información del Taller / Fábrica -->
+                <div class="space-y-6">
+                    <div class="glass-panel p-6 rounded-2xl space-y-4">
+                        <h3 class="text-lg font-bold text-white flex items-center gap-2">
+                            <i class="ph ph-factory text-cyan-400 text-xl"></i>
+                            Taller y Fábrica
+                        </h3>
+                        <p class="text-xs text-slate-300">
+                            Especialistas en carpintería de aluminio de alta y media prestación con doble vidriado hermético (DVH).
+                        </p>
+
+                        <div class="space-y-3 text-sm text-slate-300 pt-2 border-t border-white/10">
+                            <div class="flex items-start gap-3">
+                                <i class="ph ph-map-pin text-cyan-400 text-lg flex-shrink-0 mt-0.5"></i>
+                                <div>
+                                    <p class="font-medium text-white">Planta Industrial</p>
+                                    <p class="text-xs text-slate-400">Av. Circunvalación y Pellegrini, Rosario</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start gap-3">
+                                <i class="ph ph-phone text-cyan-400 text-lg flex-shrink-0 mt-0.5"></i>
+                                <div>
+                                    <p class="font-medium text-white">Teléfono de Taller</p>
+                                    <p class="text-xs text-slate-400">+54 (341) 555-0192</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start gap-3">
+                                <i class="ph ph-clock text-cyan-400 text-lg flex-shrink-0 mt-0.5"></i>
+                                <div>
+                                    <p class="font-medium text-white">Horario de Atención</p>
+                                    <p class="text-xs text-slate-400">Lunes a Viernes: 08:00 a 17:00 hs</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="glass-panel p-6 rounded-2xl">
+                        <h3 class="text-sm font-bold text-white mb-2 flex items-center gap-2">
+                            <i class="ph ph-check-circle text-cyan-400"></i>
+                            Líneas Procesadas
+                        </h3>
+                        <ul class="text-xs text-slate-300 space-y-1.5 list-disc list-inside">
+                            <li>Línea Aluar Módena & Módena 2</li>
+                            <li>Línea A30 New con RPT</li>
+                            <li>Línea Herrero Tradicional</li>
+                            <li>Frente Integral y Piel de Vidrio</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- PIE DE PÁGINA -->
+    <footer class="glass-panel border-t border-white/10 py-6 mt-12">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-400">
+            <p>© 2026 AluGestión - Sistema Integral de Carpintería de Aluminio. Todos los derechos reservados.</p>
+            <a href="login.html" class="text-cyan-400 hover:text-cyan-300 flex items-center gap-1.5 font-medium">
+                <i class="ph ph-lock-key"></i>
+                Acceso al Sistema Interno
+            </a>
+        </div>
+    </footer>
+
+    <!-- Controlador del Formulario de Contacto -->
+    <script type="module" src="./controladores/contacto-controlador.js"></script>
 </body>
 </html>

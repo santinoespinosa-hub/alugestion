@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AluGestión - Dashboard Principal</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-image: url('https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+        }
+        .bg-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(15, 23, 42, 0.78);
+            z-index: -1;
+        }
+        .glass-panel {
+            background: rgba(30, 41, 59, 0.45);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.35);
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+        .glass-card:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(255, 255, 255, 0.25);
+            transform: translateY(-2px);
+        }
+        .glass-input {
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            color: #f8fafc;
+            transition: all 0.3s ease;
+        }
+        .glass-input:focus {
+            background: rgba(0, 0, 0, 0.45);
+            border-color: #06b6d4;
+            box-shadow: 0 0 12px rgba(6, 182, 212, 0.3);
+            outline: none;
+        }
+        .glow-text-cyan { text-shadow: 0 0 10px rgba(6, 182, 212, 0.6); }
+        .glow-cyan { box-shadow: 0 0 15px rgba(6, 182, 212, 0.4); }
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: rgba(0,0,0,0.2); }
+        ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.4); }
+        .loader {
+            border: 2px solid rgba(255,255,255,0.2);
+            border-top-color: #06b6d4;
+            border-radius: 50%;
+            width: 1.25rem;
+            height: 1.25rem;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+    </style>
+</head>
+<body class="text-slate-100 h-screen overflow-hidden">
+    
+    <div class="bg-overlay"></div>
+
+    <div id="app-container" class="flex h-screen w-full relative">
+        
+        <!-- Overlay móvil -->
+        <div id="mobile-overlay" class="fixed inset-0 bg-slate-900/80 backdrop-blur-sm z-20 hidden lg:hidden"></div>
+
+        <!-- BARRA LATERAL IZQUIERDA -->
+        <aside id="sidebar" class="w-64 flex-shrink-0 flex flex-col h-full absolute lg:relative z-30 transform -translate-x-full lg:translate-x-0 transition-transform duration-300 ease-in-out glass-panel border-r border-white/10">
+            <!-- Logo -->
+            <div class="h-16 flex items-center px-6 border-b border-white/10 text-white font-bold text-xl tracking-wide gap-3">
+                <div class="bg-gradient-to-br from-cyan-400 to-blue-600 p-2 rounded-xl glow-cyan">
+                    <i class="ph ph-bounding-box text-2xl text-white"></i>
+                </div>
+                <div>
+                    AluGestión
+                    <span class="block text-[10px] text-cyan-300 font-normal tracking-normal">Aberturas de Aluminio</span>
+                </div>
+            </div>
+
+            <!-- Menú de Navegación -->
+            <nav class="flex-1 overflow-y-auto py-6 px-3 space-y-2">
+                <a href="dashboard.html" class="nav-item active-nav w-full flex items-center gap-3 px-4 py-3 rounded-xl bg-cyan-500/20 text-cyan-300 border-l-4 border-cyan-400 font-medium transition-all text-left">
+                    <i class="ph ph-squares-four text-xl"></i>
+                    Inicio
+                </a>
+                <a href="clientes.html" class="nav-item w-full flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:bg-white/10 hover:text-white border-l-4 border-transparent transition-all text-left">
+                    <i class="ph ph-users text-xl"></i>
+                    Clientes
+                </a>
+                <a href="presupuestos.html" class="nav-item w-full flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:bg-white/10 hover:text-white border-l-4 border-transparent transition-all text-left">
+                    <i class="ph ph-file-text text-xl"></i>
+                    Presupuestos
+                </a>
+                <a href="ordenes.html" class="nav-item w-full flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:bg-white/10 hover:text-white border-l-4 border-transparent transition-all text-left">
+                    <i class="ph ph-wrench text-xl"></i>
+                    Órdenes de Trabajo
+                </a>
+                <a href="mantenimiento.html" class="nav-item w-full flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:bg-white/10 hover:text-white border-l-4 border-transparent transition-all text-left">
+                    <i class="ph ph-calendar-check text-xl"></i>
+                    Mantenimiento
+                </a>
+                <a href="contactenos.html" class="nav-item w-full flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:bg-white/10 hover:text-white border-l-4 border-transparent transition-all text-left">
+                    <i class="ph ph-chat-circle-dots text-xl"></i>
+                    Contáctenos
+                </a>
+            </nav>
+
+            <!-- Acceso Rápido / Footer Sidebar -->
+            <div class="p-4 border-t border-white/10">
+                <a href="clientes.html?action=nuevo" class="w-full py-2.5 px-4 rounded-xl bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white text-xs font-semibold flex items-center justify-center gap-2 glow-cyan transition-all">
+                    <i class="ph ph-plus-circle text-lg"></i>
+                    + Alta de Cliente
+                </a>
+            </div>
+        </aside>
+
+        <!-- CONTENIDO PRINCIPAL -->
+        <div class="flex-1 flex flex-col min-w-0 h-full overflow-hidden">
+            
+            <!-- Barra Superior (Header) -->
+            <header class="h-16 glass-panel border-b border-white/10 flex items-center justify-between px-4 lg:px-8 flex-shrink-0 z-10 rounded-none shadow-none">
+                <div class="flex items-center flex-1 gap-4">
+                    <button id="btn-toggle-sidebar" class="lg:hidden text-slate-300 hover:text-white p-2 rounded-lg hover:bg-white/10 transition-colors">
+                        <i class="ph ph-list text-2xl"></i>
+                    </button>
+
+                    <div class="relative w-full max-w-md hidden sm:block">
+                        <i class="ph ph-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-lg"></i>
+                        <input type="text" onkeydown="if(event.key === 'Enter') window.location.href='clientes.html'" placeholder="Buscar clientes, presupuestos, obras..." class="glass-input w-full pl-10 pr-4 py-2 rounded-xl text-sm">
+                    </div>
+                </div>
+
+                <!-- Perfil & Sesión -->
+                <div class="flex items-center gap-4 pl-4">
+                    <button class="text-slate-300 hover:text-cyan-400 transition-colors p-2 rounded-full hover:bg-white/10 relative" title="Notificaciones del sistema">
+                        <i class="ph ph-bell text-xl"></i>
+                        <span class="absolute top-2 right-2 w-2 h-2 bg-amber-500 rounded-full border border-slate-900 shadow-[0_0_8px_rgba(245,158,11,1)]"></span>
+                    </button>
+
+                    <div class="h-8 w-px bg-white/20 mx-1"></div>
+
+                    <!-- Usuario -->
+                    <div class="flex items-center gap-3">
+                        <img id="header-user-avatar" src="https://placehold.co/100x100/0f172a/06b6d4?text=AG" alt="Avatar" class="w-9 h-9 rounded-full object-cover border border-cyan-500/50">
+                        <div class="hidden md:block text-left">
+                            <p id="header-user-name" class="text-sm font-bold text-white leading-tight">Usuario</p>
+                            <p id="header-user-role" class="text-xs text-cyan-300 leading-tight">Administrador</p>
+                        </div>
+                        <button id="btn-logout" class="text-slate-400 hover:text-red-400 p-1.5 rounded-lg hover:bg-white/10 transition-colors" title="Cerrar Sesión">
+                            <i class="ph ph-sign-out text-xl"></i>
+                        </button>
+                    </div>
+                </div>
+            </header>
+
+            <!-- VISTA DEL DASHBOARD -->
+            <main class="flex-1 overflow-y-auto p-6 lg:p-8 relative z-0 space-y-8">
+                
+                <!-- Encabezado del Dashboard -->
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <div>
+                        <h1 class="text-3xl font-bold text-white glow-text-cyan tracking-tight">Dashboard Principal</h1>
+                        <p class="text-sm text-slate-300 mt-1">Resumen general y métricas en tiempo real de AluGestión.</p>
+                    </div>
+                    <button id="btn-nuevo-cliente-dash" class="bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white px-5 py-2.5 rounded-xl font-medium shadow-lg flex items-center gap-2 transition-all glow-cyan border border-cyan-400/30">
+                        <i class="ph ph-plus-circle text-xl"></i>
+                        + Nuevo Cliente
+                    </button>
+                </div>
+
+                <!-- Tarjetas de Métricas Dinámicas (Desde MySQL) -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <!-- Tarjeta 1: Presupuestos Pendientes -->
+                    <div class="glass-card p-6 rounded-2xl flex flex-col relative overflow-hidden group">
+                        <div class="absolute top-0 right-0 w-24 h-24 bg-amber-500/20 rounded-full blur-2xl -mr-10 -mt-10 transition-transform group-hover:scale-150"></div>
+                        <div class="flex items-start justify-between mb-4">
+                            <div class="w-12 h-12 rounded-xl bg-amber-500/20 border border-amber-500/30 text-amber-400 flex items-center justify-center text-2xl shadow-[0_0_15px_rgba(245,158,11,0.2)]">
+                                <i class="ph ph-file-text"></i>
+                            </div>
+                            <span class="text-xs px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/30">En revisión</span>
+                        </div>
+                        <p id="stat-presupuestos" class="text-3xl font-bold text-white mb-1">14</p>
+                        <p class="text-sm text-slate-400 font-medium">Presupuestos Pendientes</p>
+                    </div>
+
+                    <!-- Tarjeta 2: Pedidos Activos -->
+                    <div class="glass-card p-6 rounded-2xl flex flex-col relative overflow-hidden group">
+                        <div class="absolute top-0 right-0 w-24 h-24 bg-cyan-500/20 rounded-full blur-2xl -mr-10 -mt-10 transition-transform group-hover:scale-150"></div>
+                        <div class="flex items-start justify-between mb-4">
+                            <div class="w-12 h-12 rounded-xl bg-cyan-500/20 border border-cyan-500/30 text-cyan-400 flex items-center justify-center text-2xl shadow-[0_0_15px_rgba(6,182,212,0.2)]">
+                                <i class="ph ph-wrench"></i>
+                            </div>
+                            <span class="text-xs px-2 py-0.5 rounded-full bg-cyan-500/20 text-cyan-300 border border-cyan-500/30">En fábrica</span>
+                        </div>
+                        <p id="stat-pedidos" class="text-3xl font-bold text-white mb-1">28</p>
+                        <p class="text-sm text-slate-400 font-medium">Pedidos / Órdenes Activas</p>
+                    </div>
+
+                    <!-- Tarjeta 3: Mantenimientos Programados -->
+                    <div class="glass-card p-6 rounded-2xl flex flex-col relative overflow-hidden group">
+                        <div class="absolute top-0 right-0 w-24 h-24 bg-fuchsia-500/20 rounded-full blur-2xl -mr-10 -mt-10 transition-transform group-hover:scale-150"></div>
+                        <div class="flex items-start justify-between mb-4">
+                            <div class="w-12 h-12 rounded-xl bg-fuchsia-500/20 border border-fuchsia-500/30 text-fuchsia-400 flex items-center justify-center text-2xl shadow-[0_0_15px_rgba(217,70,239,0.2)]">
+                                <i class="ph ph-calendar-check"></i>
+                            </div>
+                            <span class="text-xs px-2 py-0.5 rounded-full bg-fuchsia-500/20 text-fuchsia-300 border border-fuchsia-500/30">Próximos</span>
+                        </div>
+                        <p id="stat-mantenimientos" class="text-3xl font-bold text-white mb-1">7</p>
+                        <p class="text-sm text-slate-400 font-medium">Mantenimientos Prog.</p>
+                    </div>
+
+                    <!-- Tarjeta 4: Ingresos Totales -->
+                    <div class="glass-card p-6 rounded-2xl flex flex-col relative overflow-hidden group">
+                        <div class="absolute top-0 right-0 w-24 h-24 bg-emerald-500/20 rounded-full blur-2xl -mr-10 -mt-10 transition-transform group-hover:scale-150"></div>
+                        <div class="flex items-start justify-between mb-4">
+                            <div class="w-12 h-12 rounded-xl bg-emerald-500/20 border border-emerald-500/30 text-emerald-400 flex items-center justify-center text-2xl shadow-[0_0_15px_rgba(16,185,129,0.2)]">
+                                <i class="ph ph-currency-circle-dollar"></i>
+                            </div>
+                            <span class="text-xs px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">Mes en curso</span>
+                        </div>
+                        <p id="stat-ingresos" class="text-3xl font-bold text-white mb-1">$1.2M</p>
+                        <p class="text-sm text-slate-400 font-medium">Ingresos Totales (Mes)</p>
+                    </div>
+                </div>
+
+                <!-- Bloque de Acceso Directo y Clientes Recientes -->
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    
+                    <!-- Tarjeta de Gestión de Clientes -->
+                    <div class="glass-panel p-6 rounded-2xl flex flex-col justify-between">
+                        <div>
+                            <div class="w-12 h-12 rounded-xl bg-cyan-500/20 text-cyan-400 flex items-center justify-center text-2xl mb-4 glow-cyan">
+                                <i class="ph ph-users-three"></i>
+                            </div>
+                            <h2 class="text-xl font-bold text-white mb-2">Módulo de Clientes</h2>
+                            <p class="text-sm text-slate-300 mb-4">Consulta el listado dinámico, da de alta nuevas obras y gestiona bajas lógicas conectadas a MySQL.</p>
+                        </div>
+                        <div class="space-y-3">
+                            <a href="clientes.html" class="w-full py-2.5 px-4 rounded-xl bg-white/10 hover:bg-white/20 text-white text-sm font-medium flex items-center justify-center gap-2 border border-white/10 transition-all">
+                                <i class="ph ph-list-dashes"></i> Ver Todos los Clientes
+                            </a>
+                            <a href="clientes.html?action=nuevo" class="w-full py-2.5 px-4 rounded-xl bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white text-sm font-medium flex items-center justify-center gap-2 glow-cyan transition-all">
+                                <i class="ph ph-user-plus"></i> + Alta de Nuevo Cliente
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Tabla de Clientes Recientes de MySQL -->
+                    <div class="lg:col-span-2 glass-panel p-6 rounded-2xl flex flex-col">
+                        <div class="flex items-center justify-between mb-4">
+                            <div>
+                                <h2 class="text-lg font-bold text-white">Clientes Recientes en MySQL</h2>
+                                <p class="text-xs text-slate-400">Últimos registros cargados en la base de datos de AluGestión</p>
+                            </div>
+                            <a href="clientes.html" class="text-xs font-semibold text-cyan-400 hover:text-cyan-300 flex items-center gap-1">
+                                Ver todos <i class="ph ph-arrow-right"></i>
+                            </a>
+                        </div>
+
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left text-sm whitespace-nowrap">
+                                <thead class="bg-black/30 text-slate-400 font-semibold border-b border-white/10 text-xs">
+                                    <tr>
+                                        <th class="px-6 py-3">Cliente</th>
+                                        <th class="px-6 py-3">CUIT / DNI</th>
+                                        <th class="px-6 py-3">Teléfono</th>
+                                        <th class="px-6 py-3">Estado</th>
+                                        <th class="px-6 py-3 text-right">Acción</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="dashboard-recent-clients" class="divide-y divide-white/5">
+                                    <tr>
+                                        <td colspan="5" class="px-6 py-6 text-center text-slate-400">
+                                            <div class="flex items-center justify-center gap-2">
+                                                <div class="loader"></div>
+                                                <span>Cargando clientes de MySQL...</span>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="h-6"></div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script type="module" src="./controladores/nav-autenticacion.js"></script>
+    <script type="module" src="./controladores/dashboard-controlador.js"></script>
+</body>
+</html>

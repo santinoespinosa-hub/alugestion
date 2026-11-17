@@ -9,7 +9,7 @@ import { showToast } from './nav-autenticacion.js';
 document.addEventListener('DOMContentLoaded', () => {
     // Si ya tiene sesión activa, redirigir al dashboard
     if (obtenerUsuarioActual()) {
-        window.location.href = 'index.html';
+        window.location.href = 'dashboard.html';
         return;
     }
 
@@ -55,7 +55,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     showToast('¡Autenticación exitosa! Ingresando a AluGestión...', 'success');
 
                     setTimeout(() => {
-                        window.location.href = 'index.html';
+                        window.location.href = 'dashboard.html';
                     }, 1000);
                 } else {
                     const mensaje = respuesta.message || 'Usuario o contraseña incorrectos';
