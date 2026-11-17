@@ -1,0 +1,61 @@
+const URL_LOGIN = './api/login.php';
+const URL_REGISTRO = './api/registro.phpr';
+
+/**
+ * Envía los datos del nuevo usuario para insertarlos en la BD
+ * @param {FormData} datosForm 
+ * @returns 
+ */
+export const registrar = async (datosForm) => {
+    const res = await fetch(URL_REGISTRO, {
+        method: 'POST',
+        body: datosForm
+    });
+
+    return await res.json();
+}
+
+
+/**
+ * Inicia sesión enviando usuario y clave
+ * @param {FormData} datosForm - Formulario con usuario y password
+ * @returns 
+ */
+export const login = async (datosForm) => {
+    const res = await fetch(URL_LOGIN, {
+        method: 'POST',
+        body: datosForm
+    });
+
+    const data = await res.json();
+
+    if(data.success && data.token) {
+        // Guardamos el token en sessionStorage
+        sessionStorage.setItem('jwt_token', data.token);
+        sessionStorage.setItem('usuario_info', JSON.stringify(data.usuario));
+    }
+
+    return data;
+
+}; 
+
+export const logout = () => {
+    sessionStorage.removeItem('jwt_token');
+    sessionStorage.removeItem('usuario_info');
+    window.location.reload();
+}
+
+/**
+ * Obtiene el token guardado en el navegador
+ */
+export function obtenerToken() {
+    return sessionStorage.getItem('jwt_token');
+}
+
+/**
+ * Obtiene la información del usuario autenticado
+ */
+export function obtenerUsuarioActual() {
+    const usuario = sessionStorage.getItem('usuario_info');
+    return usuario ? JSON.parse(usuario) : null;
+}

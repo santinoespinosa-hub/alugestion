@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Iniciar Sesión - AluGestión</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-image: url('https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+        }
+        .bg-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(15, 23, 42, 0.85);
+            z-index: -1;
+        }
+        .glass-panel {
+            background: rgba(30, 41, 59, 0.45);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
+        }
+        .glass-input {
+            background: rgba(0, 0, 0, 0.35);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            color: #f8fafc;
+            transition: all 0.3s ease;
+        }
+        .glass-input:focus {
+            background: rgba(0, 0, 0, 0.5);
+            border-color: #06b6d4;
+            box-shadow: 0 0 12px rgba(6, 182, 212, 0.35);
+            outline: none;
+        }
+        .glass-input::placeholder {
+            color: rgba(255, 255, 255, 0.4);
+        }
+        .glow-text-cyan { text-shadow: 0 0 10px rgba(6, 182, 212, 0.6); }
+        .glow-cyan { box-shadow: 0 0 15px rgba(6, 182, 212, 0.4); }
+        .loader {
+            border: 2px solid rgba(255,255,255,0.2);
+            border-top-color: #fff;
+            border-radius: 50%;
+            width: 1rem;
+            height: 1rem;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+    </style>
+</head>
+<body class="text-slate-100 min-h-screen flex items-center justify-center p-4">
+    
+    <div class="bg-overlay"></div>
+
+    <div class="glass-panel w-full max-w-md p-8 rounded-2xl relative overflow-hidden">
+        <!-- Decoración de resplandor -->
+        <div class="absolute -top-20 -right-20 w-40 h-40 bg-cyan-500 rounded-full blur-3xl opacity-20"></div>
+        <div class="absolute -bottom-20 -left-20 w-40 h-40 bg-blue-600 rounded-full blur-3xl opacity-20"></div>
+
+        <div class="relative z-10">
+            <!-- Logo y Título -->
+            <div class="flex items-center justify-center gap-3 mb-6">
+                <div class="bg-gradient-to-tr from-cyan-500 to-blue-600 p-2.5 rounded-xl glow-cyan">
+                    <i class="ph ph-bounding-box text-3xl text-white"></i>
+                </div>
+                <div>
+                    <h1 class="text-2xl font-bold tracking-wider text-white glow-text-cyan">AluGestión</h1>
+                    <p class="text-xs text-cyan-300">Aberturas de Aluminio</p>
+                </div>
+            </div>
+            
+            <p class="text-slate-300 text-center text-sm mb-6">Ingresa tus credenciales para acceder al sistema.</p>
+            
+            <!-- Alerta de Error -->
+            <div id="login-error-alert" class="hidden mb-4 p-3 rounded-lg bg-red-500/20 border border-red-500/50 text-red-200 text-sm flex items-center gap-2" role="alert">
+                <i class="ph ph-warning-circle text-lg flex-shrink-0"></i>
+                <span id="login-error-text">Credenciales incorrectas. Por favor intenta nuevamente.</span>
+            </div>
+
+            <form id="login-form" class="space-y-4">
+                <div>
+                    <label for="usuario" class="block text-sm font-medium text-slate-300 mb-1">Usuario o Correo Electrónico</label>
+                    <div class="relative">
+                        <i class="ph ph-user absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-lg"></i>
+                        <input type="text" id="usuario" name="usuario" required placeholder="admin o usuario@empresa.com" class="glass-input w-full pl-10 pr-4 py-2.5 rounded-xl text-sm" autocomplete="username">
+                    </div>
+                </div>
+                
+                <div>
+                    <label for="password" class="block text-sm font-medium text-slate-300 mb-1">Contraseña</label>
+                    <div class="relative">
+                        <i class="ph ph-lock-key absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-lg"></i>
+                        <input type="password" id="password" name="password" required placeholder="••••••••" class="glass-input w-full pl-10 pr-10 py-2.5 rounded-xl text-sm" autocomplete="current-password">
+                        <button type="button" id="btn-toggle-pwd" class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white transition-colors">
+                            <i class="ph ph-eye"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="p-3 rounded-xl bg-cyan-950/40 border border-cyan-800/40 text-xs text-cyan-200">
+                    <p class="font-semibold mb-1">Acceso de prueba precargado:</p>
+                    <p>• Usuario: <span class="font-mono text-white">admin</span> | Clave: <span class="font-mono text-white">admin123</span></p>
+                </div>
+
+                <button type="submit" id="btn-login" class="w-full py-3 rounded-xl bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white font-medium flex items-center justify-center gap-2 transition-all glow-cyan mt-4">
+                    <span id="btn-login-text">Iniciar Sesión</span>
+                    <div id="btn-login-loader" class="loader hidden"></div>
+                </button>
+                
+                <div class="flex items-center justify-between text-xs text-slate-400 pt-3 border-t border-white/10">
+                    <a href="index.html" class="hover:text-cyan-400 transition-colors">Ver como Invitado</a>
+                    <p>¿No tienes cuenta? <a href="registro.html" class="text-cyan-400 hover:text-cyan-300 font-medium">Regístrate aquí</a></p>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script type="module" src="./controladores/login-controlador.js"></script>
+</body>
+</html>

@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AluGestión - Contáctenos</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-image: url('https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+        }
+        .bg-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(15, 23, 42, 0.78);
+            z-index: -1;
+        }
+        .glass-panel {
+            background: rgba(30, 41, 59, 0.45);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.35);
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+        .glass-input {
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            color: #f8fafc;
+            transition: all 0.3s ease;
+        }
+        .glass-input:focus {
+            background: rgba(0, 0, 0, 0.45);
+            border-color: #06b6d4;
+            box-shadow: 0 0 12px rgba(6, 182, 212, 0.3);
+            outline: none;
+        }
+        .glass-input::placeholder {
+            color: rgba(255, 255, 255, 0.4);
+        }
+        .glow-text-cyan { text-shadow: 0 0 10px rgba(6, 182, 212, 0.6); }
+        .glow-cyan { box-shadow: 0 0 15px rgba(6, 182, 212, 0.4); }
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: rgba(0,0,0,0.2); }
+        ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.4); }
+        .loader {
+            border: 2px solid rgba(255,255,255,0.2);
+            border-top-color: #06b6d4;
+            border-radius: 50%;
+            width: 1rem;
+            height: 1rem;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+    </style>
+</head>
+<body class="text-slate-100 h-screen overflow-hidden">
+    
+    <div class="bg-overlay"></div>
+
+    <div id="app-container" class="flex h-screen w-full relative">
+        
+        <!-- Mobile Overlay -->
+        <div id="mobile-overlay" class="fixed inset-0 bg-slate-900/80 backdrop-blur-sm z-20 hidden lg:hidden"></div>
+
+        <!-- BARRA LATERAL IZQUIERDA -->
+        <aside id="sidebar" class="w-64 flex-shrink-0 flex flex-col h-full absolute lg:relative z-30 transform -translate-x-full lg:translate-x-0 transition-transform duration-300 ease-in-out glass-panel border-r border-white/10">
+            <!-- Logo -->
+            <div class="h-16 flex items-center px-6 border-b border-white/10 text-white font-bold text-xl tracking-wide gap-3">
+                <div class="bg-gradient-to-br from-cyan-400 to-blue-600 p-2 rounded-xl glow-cyan">
+                    <i class="ph ph-bounding-box text-2xl text-white"></i>
+                </div>
+                <div>
+                    AluGestión
+                    <span class="block text-[10px] text-cyan-300 font-normal tracking-normal">Aberturas de Aluminio</span>
+                </div>
+            </div>
+
+            <!-- Menú de Navegación -->
+            <nav class="flex-1 overflow-y-auto py-6 px-3 space-y-2">
+                <a href="index.html" class="nav-item w-full flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:bg-white/10 hover:text-white border-l-4 border-transparent transition-all text-left">
+                    <i class="ph ph-squares-four text-xl"></i>
+                    Inicio
+                </a>
+                <a href="clientes.html" class="nav-item w-full flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:bg-white/10 hover:text-white border-l-4 border-transparent transition-all text-left">
+                    <i class="ph ph-users text-xl"></i>
+                    Clientes
+                </a>
+                <a href="presupuestos.html" class="nav-item w-full flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:bg-white/10 hover:text-white border-l-4 border-transparent transition-all text-left">
+                    <i class="ph ph-file-text text-xl"></i>
+                    Presupuestos
+                </a>
+                <a href="ordenes.html" class="nav-item w-full flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:bg-white/10 hover:text-white border-l-4 border-transparent transition-all text-left">
+                    <i class="ph ph-wrench text-xl"></i>
+                    Órdenes de Trabajo
+                </a>
+                <a href="mantenimiento.html" class="nav-item w-full flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:bg-white/10 hover:text-white border-l-4 border-transparent transition-all text-left">
+                    <i class="ph ph-calendar-check text-xl"></i>
+                    Mantenimiento
+                </a>
+                <a href="contactenos.html" class="nav-item active-nav w-full flex items-center gap-3 px-4 py-3 rounded-xl bg-cyan-500/20 text-cyan-300 border-l-4 border-cyan-400 font-medium transition-all text-left">
+                    <i class="ph ph-chat-circle-dots text-xl"></i>
+                    Contáctenos
+                </a>
+            </nav>
+
+            <div class="p-4 border-t border-white/10">
+                <a href="clientes.html?action=nuevo" class="w-full py-2.5 px-4 rounded-xl bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white text-xs font-semibold flex items-center justify-center gap-2 glow-cyan transition-all">
+                    <i class="ph ph-plus-circle text-lg"></i>
+                    + Alta de Cliente
+                </a>
+            </div>
+        </aside>
+
+        <!-- ÁREA PRINCIPAL -->
+        <div class="flex-1 flex flex-col min-w-0 h-full overflow-hidden">
+            
+            <!-- Barra Superior -->
+            <header class="h-16 glass-panel border-b border-white/10 flex items-center justify-between px-4 lg:px-8 flex-shrink-0 z-10 rounded-none shadow-none">
+                <div class="flex items-center flex-1 gap-4">
+                    <button id="btn-toggle-sidebar" class="lg:hidden text-slate-300 hover:text-white p-2 rounded-lg hover:bg-white/10 transition-colors">
+                        <i class="ph ph-list text-2xl"></i>
+                    </button>
+                    <div class="text-sm font-medium text-slate-300 flex items-center gap-2">
+                        <span class="text-cyan-400">AluGestión</span>
+                        <i class="ph ph-caret-right text-xs text-slate-500"></i>
+                        <span>Formulario de Contacto</span>
+                    </div>
+                </div>
+
+                <!-- Perfil -->
+                <div class="flex items-center gap-4 pl-4">
+                    <div class="flex items-center gap-3">
+                        <img id="header-user-avatar" src="https://placehold.co/100x100/0f172a/06b6d4?text=AG" alt="Avatar" class="w-9 h-9 rounded-full object-cover border border-cyan-500/50">
+                        <div class="hidden md:block text-left">
+                            <p id="header-user-name" class="text-sm font-bold text-white leading-tight">Usuario</p>
+                            <p id="header-user-role" class="text-xs text-cyan-300 leading-tight">Administrador</p>
+                        </div>
+                        <button id="btn-logout" class="text-slate-400 hover:text-red-400 p-1.5 rounded-lg hover:bg-white/10 transition-colors" title="Cerrar Sesión">
+                            <i class="ph ph-sign-out text-xl"></i>
+                        </button>
+                    </div>
+                </div>
+            </header>
+
+            <!-- CONTENIDO PRINCIPAL -->
+            <main class="flex-1 overflow-y-auto p-6 lg:p-8 relative z-0">
+                
+                <div class="max-w-5xl mx-auto space-y-6">
+                    <div>
+                        <h1 class="text-3xl font-bold text-white glow-text-cyan tracking-tight">Contáctenos y Consultas</h1>
+                        <p class="text-sm text-slate-300 mt-1">
+                            Envíanos tu mensaje o solicitud de cotización. La información se guardará directamente en la base de datos de AluGestión.
+                        </p>
+                    </div>
+
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                        
+                        <!-- Formulario de Contacto -->
+                        <div class="lg:col-span-2 glass-panel p-6 lg:p-8 rounded-2xl">
+                            <form id="form-contacto" class="space-y-4">
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                    <div>
+                                        <label for="nombre" class="block text-sm font-medium text-slate-300 mb-1">Nombre y Apellido *</label>
+                                        <input type="text" id="nombre" name="nombre" required placeholder="Juan Pérez" class="glass-input w-full px-4 py-2.5 rounded-xl text-sm">
+                                    </div>
+                                    <div>
+                                        <label for="email" class="block text-sm font-medium text-slate-300 mb-1">Correo Electrónico *</label>
+                                        <input type="email" id="email" name="email" required placeholder="correo@ejemplo.com" class="glass-input w-full px-4 py-2.5 rounded-xl text-sm">
+                                    </div>
+                                </div>
+
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                    <div>
+                                        <label for="telefono" class="block text-sm font-medium text-slate-300 mb-1">Teléfono</label>
+                                        <input type="tel" id="telefono" name="telefono" placeholder="+54 9 341..." class="glass-input w-full px-4 py-2.5 rounded-xl text-sm">
+                                    </div>
+                                    <div>
+                                        <label for="direccion" class="block text-sm font-medium text-slate-300 mb-1">Dirección / Obra</label>
+                                        <input type="text" id="direccion" name="direccion" placeholder="Calle y número" class="glass-input w-full px-4 py-2.5 rounded-xl text-sm">
+                                    </div>
+                                </div>
+
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                    <div>
+                                        <label for="localidad" class="block text-sm font-medium text-slate-300 mb-1">Localidad</label>
+                                        <input type="text" id="localidad" name="localidad" placeholder="Rosario, Santa Fe..." class="glass-input w-full px-4 py-2.5 rounded-xl text-sm">
+                                    </div>
+                                    <div>
+                                        <label for="provincia" class="block text-sm font-medium text-slate-300 mb-1">Provincia</label>
+                                        <input type="text" id="provincia" name="provincia" placeholder="Santa Fe" class="glass-input w-full px-4 py-2.5 rounded-xl text-sm">
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <label for="mensaje" class="block text-sm font-medium text-slate-300 mb-1">Mensaje o Detalle de Aberturas *</label>
+                                    <textarea id="mensaje" name="mensaje" rows="4" required placeholder="Describe las medidas, cantidad de aberturas, tipo de línea (Módena, A30) o consulta de servicio..." class="glass-input w-full px-4 py-3 rounded-xl resize-none text-sm"></textarea>
+                                </div>
+
+                                <div class="pt-4 flex items-center justify-between border-t border-white/10">
+                                    <span class="text-xs text-slate-400">Los campos con (*) son obligatorios</span>
+                                    <button type="submit" id="btn-enviar-contacto" class="bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white px-6 py-2.5 rounded-xl font-medium shadow-lg flex items-center gap-2 glow-cyan transition-all">
+                                        <i class="ph ph-paper-plane-tilt text-lg"></i>
+                                        <span id="btn-contacto-text">Enviar Mensaje</span>
+                                        <div id="btn-contacto-loader" class="loader hidden"></div>
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+
+                        <!-- Información del Taller / Fábrica -->
+                        <div class="space-y-6">
+                            <div class="glass-panel p-6 rounded-2xl space-y-4">
+                                <h2 class="text-lg font-bold text-white flex items-center gap-2">
+                                    <i class="ph ph-factory text-cyan-400 text-xl"></i>
+                                    Taller y Fábrica
+                                </h2>
+                                <p class="text-xs text-slate-300">
+                                    Especialistas en carpintería de aluminio de alta y media prestación con doble vidriado hermético (DVH).
+                                </p>
+
+                                <div class="space-y-3 text-sm text-slate-300 pt-2 border-t border-white/10">
+                                    <div class="flex items-start gap-3">
+                                        <i class="ph ph-map-pin text-cyan-400 text-lg flex-shrink-0 mt-0.5"></i>
+                                        <div>
+                                            <p class="font-medium text-white">Planta Industrial</p>
+                                            <p class="text-xs text-slate-400">Av. Circunvalación y Pellegrini, Rosario</p>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-start gap-3">
+                                        <i class="ph ph-phone text-cyan-400 text-lg flex-shrink-0 mt-0.5"></i>
+                                        <div>
+                                            <p class="font-medium text-white">Teléfono de Taller</p>
+                                            <p class="text-xs text-slate-400">+54 (341) 555-0192</p>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-start gap-3">
+                                        <i class="ph ph-clock text-cyan-400 text-lg flex-shrink-0 mt-0.5"></i>
+                                        <div>
+                                            <p class="font-medium text-white">Horario de Atención</p>
+                                            <p class="text-xs text-slate-400">Lunes a Viernes: 08:00 a 17:00 hs</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="glass-panel p-6 rounded-2xl">
+                                <h3 class="text-sm font-bold text-white mb-2 flex items-center gap-2">
+                                    <i class="ph ph-check-circle text-cyan-400"></i>
+                                    Líneas Procesadas
+                                </h3>
+                                <ul class="text-xs text-slate-300 space-y-1.5 list-disc list-inside">
+                                    <li>Línea Aluar Módena & Módena 2</li>
+                                    <li>Línea A30 New con RPT</li>
+                                    <li>Línea Herrero Tradicional</li>
+                                    <li>Frente Integral y Piel de Vidrio</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="h-12"></div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script type="module" src="./controladores/nav-autenticacion.js"></script>
+    <script type="module" src="./controladores/contacto-controlador.js"></script>
+</body>
+</html>

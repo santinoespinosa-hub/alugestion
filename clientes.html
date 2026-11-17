@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AluGestión - Gestión de Clientes</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-image: url('https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+        }
+        .bg-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(15, 23, 42, 0.78);
+            z-index: -1;
+        }
+        .glass-panel {
+            background: rgba(30, 41, 59, 0.45);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.35);
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+        .glass-card:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+        .glass-input {
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            color: #f8fafc;
+            transition: all 0.3s ease;
+        }
+        .glass-input:focus {
+            background: rgba(0, 0, 0, 0.45);
+            border-color: #06b6d4;
+            box-shadow: 0 0 12px rgba(6, 182, 212, 0.3);
+            outline: none;
+        }
+        .glass-input::placeholder {
+            color: rgba(255, 255, 255, 0.4);
+        }
+        select.glass-input option {
+            background-color: #0f172a;
+            color: #ffffff;
+        }
+        .glow-text-cyan { text-shadow: 0 0 10px rgba(6, 182, 212, 0.6); }
+        .glow-cyan { box-shadow: 0 0 15px rgba(6, 182, 212, 0.4); }
+        .hidden-view { display: none !important; }
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: rgba(0,0,0,0.2); }
+        ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.4); }
+        .loader {
+            border: 2px solid rgba(255,255,255,0.2);
+            border-top-color: #06b6d4;
+            border-radius: 50%;
+            width: 1.1rem;
+            height: 1.1rem;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+    </style>
+</head>
+<body class="text-slate-100 h-screen overflow-hidden">
+    
+    <div class="bg-overlay"></div>
+
+    <div id="app-container" class="flex h-screen w-full relative">
+        
+        <!-- Mobile Overlay -->
+        <div id="mobile-overlay" class="fixed inset-0 bg-slate-900/80 backdrop-blur-sm z-20 hidden lg:hidden"></div>
+
+        <!-- BARRA LATERAL IZQUIERDA -->
+        <aside id="sidebar" class="w-64 flex-shrink-0 flex flex-col h-full absolute lg:relative z-30 transform -translate-x-full lg:translate-x-0 transition-transform duration-300 ease-in-out glass-panel border-r border-white/10">
+            <!-- Logo -->
+            <div class="h-16 flex items-center px-6 border-b border-white/10 text-white font-bold text-xl tracking-wide gap-3">
+                <div class="bg-gradient-to-br from-cyan-400 to-blue-600 p-2 rounded-xl glow-cyan">
+                    <i class="ph ph-bounding-box text-2xl text-white"></i>
+                </div>
+                <div>
+                    AluGestión
+                    <span class="block text-[10px] text-cyan-300 font-normal tracking-normal">Aberturas de Aluminio</span>
+                </div>
+            </div>
+
+            <!-- Menú de Navegación -->
+            <nav class="flex-1 overflow-y-auto py-6 px-3 space-y-2">
+                <a href="index.html" class="nav-item w-full flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:bg-white/10 hover:text-white border-l-4 border-transparent transition-all text-left">
+                    <i class="ph ph-squares-four text-xl"></i>
+                    Inicio
+                </a>
+                <a href="clientes.html" class="nav-item active-nav w-full flex items-center gap-3 px-4 py-3 rounded-xl bg-cyan-500/20 text-cyan-300 border-l-4 border-cyan-400 font-medium transition-all text-left">
+                    <i class="ph ph-users text-xl"></i>
+                    Clientes
+                </a>
+                <a href="presupuestos.html" class="nav-item w-full flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:bg-white/10 hover:text-white border-l-4 border-transparent transition-all text-left">
+                    <i class="ph ph-file-text text-xl"></i>
+                    Presupuestos
+                </a>
+                <a href="ordenes.html" class="nav-item w-full flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:bg-white/10 hover:text-white border-l-4 border-transparent transition-all text-left">
+                    <i class="ph ph-wrench text-xl"></i>
+                    Órdenes de Trabajo
+                </a>
+                <a href="mantenimiento.html" class="nav-item w-full flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:bg-white/10 hover:text-white border-l-4 border-transparent transition-all text-left">
+                    <i class="ph ph-calendar-check text-xl"></i>
+                    Mantenimiento
+                </a>
+                <a href="contactenos.html" class="nav-item w-full flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:bg-white/10 hover:text-white border-l-4 border-transparent transition-all text-left">
+                    <i class="ph ph-chat-circle-dots text-xl"></i>
+                    Contáctenos
+                </a>
+            </nav>
+
+            <div class="p-4 border-t border-white/10">
+                <button onclick="abrirFormularioAlta()" class="w-full py-2.5 px-4 rounded-xl bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white text-xs font-semibold flex items-center justify-center gap-2 glow-cyan transition-all">
+                    <i class="ph ph-plus-circle text-lg"></i>
+                    + Registrar Cliente
+                </button>
+            </div>
+        </aside>
+
+        <!-- ÁREA PRINCIPAL -->
+        <div class="flex-1 flex flex-col min-w-0 h-full overflow-hidden">
+            
+            <!-- Barra Superior (Header) -->
+            <header class="h-16 glass-panel border-b border-white/10 flex items-center justify-between px-4 lg:px-8 flex-shrink-0 z-10 rounded-none shadow-none">
+                <div class="flex items-center flex-1 gap-4">
+                    <button id="btn-toggle-sidebar" class="lg:hidden text-slate-300 hover:text-white p-2 rounded-lg hover:bg-white/10 transition-colors">
+                        <i class="ph ph-list text-2xl"></i>
+                    </button>
+
+                    <div class="text-sm font-medium text-slate-300 flex items-center gap-2">
+                        <span class="text-cyan-400">AluGestión</span>
+                        <i class="ph ph-caret-right text-xs text-slate-500"></i>
+                        <span>Módulo de Clientes</span>
+                    </div>
+                </div>
+
+                <!-- Perfil & Sesión -->
+                <div class="flex items-center gap-4 pl-4">
+                    <div class="flex items-center gap-3">
+                        <img id="header-user-avatar" src="https://placehold.co/100x100/0f172a/06b6d4?text=AG" alt="Avatar" class="w-9 h-9 rounded-full object-cover border border-cyan-500/50">
+                        <div class="hidden md:block text-left">
+                            <p id="header-user-name" class="text-sm font-bold text-white leading-tight">Administrador</p>
+                            <p id="header-user-role" class="text-xs text-cyan-300 leading-tight">Gerente</p>
+                        </div>
+                        <button id="btn-logout" class="text-slate-400 hover:text-red-400 p-1.5 rounded-lg hover:bg-white/10 transition-colors" title="Cerrar Sesión">
+                            <i class="ph ph-sign-out text-xl"></i>
+                        </button>
+                    </div>
+                </div>
+            </header>
+
+            <!-- CONTENIDO DE VISTAS -->
+            <main class="flex-1 overflow-y-auto p-6 lg:p-8 relative z-0">
+                
+                <!-- ==============================================
+                     1. VISTA: LISTADO DE CLIENTES (CONSULTA / BUSCADOR)
+                     ============================================== -->
+                <div id="view-client-list" class="view-section animate-fade-in">
+                    
+                    <!-- Encabezado de la página -->
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+                        <div>
+                            <h1 class="text-3xl font-bold text-white glow-text-cyan tracking-tight">Gestión de Clientes</h1>
+                            <p class="text-sm text-slate-300 mt-1">Consulta, alta, modificación y bajas lógicas conectadas a MySQL.</p>
+                        </div>
+                        <button onclick="abrirFormularioAlta()" class="bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white px-5 py-2.5 rounded-xl font-medium shadow-lg flex items-center gap-2 transition-all glow-cyan border border-cyan-400/30">
+                            <i class="ph ph-plus text-xl"></i>
+                            + Agregar Nuevo Cliente
+                        </button>
+                    </div>
+
+                    <!-- Panel de la Tabla con Buscador en tiempo real -->
+                    <div class="glass-panel rounded-2xl overflow-hidden flex flex-col">
+                        
+                        <!-- Barra de Búsqueda y Filtros de Estado -->
+                        <div class="p-4 border-b border-white/10 flex flex-col md:flex-row items-center justify-between gap-4 bg-black/20">
+                            
+                            <!-- Buscador en Tiempo Real -->
+                            <div class="relative w-full md:max-w-md">
+                                <i class="ph ph-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-cyan-400 text-lg"></i>
+                                <input type="text" id="input-buscar-cliente" placeholder="Buscar por Nombre, Razón Social o DNI/CUIT..." class="glass-input w-full pl-10 pr-4 py-2.5 rounded-xl text-sm">
+                            </div>
+
+                            <!-- Filtros de Estado (Pestañas) -->
+                            <div class="flex items-center gap-2 w-full md:w-auto">
+                                <button type="button" data-estado="todos" class="btn-filtro-estado px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-cyan-500/30 text-cyan-300 border border-cyan-400 transition-all">
+                                    Todos
+                                </button>
+                                <button type="button" data-estado="Activo" class="btn-filtro-estado px-3.5 py-1.5 rounded-xl text-xs font-semibold text-slate-400 hover:text-white border border-transparent transition-all">
+                                    Activos
+                                </button>
+                                <button type="button" data-estado="Inactivo" class="btn-filtro-estado px-3.5 py-1.5 rounded-xl text-xs font-semibold text-slate-400 hover:text-white border border-transparent transition-all">
+                                    Inactivos
+                                </button>
+                                <span id="total-clientes-count" class="text-xs text-slate-400 ml-2 hidden sm:inline"></span>
+                            </div>
+                        </div>
+
+                        <!-- Tabla Dinámica -->
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left text-sm whitespace-nowrap">
+                                <thead class="bg-black/40 text-slate-300 font-semibold border-b border-white/10">
+                                    <tr>
+                                        <th class="px-6 py-4">Nombre / Razón Social</th>
+                                        <th class="px-6 py-4">CUIT / DNI</th>
+                                        <th class="px-6 py-4">Teléfono</th>
+                                        <th class="px-6 py-4">Dirección de Obra</th>
+                                        <th class="px-6 py-4">Estado</th>
+                                        <th class="px-6 py-4 text-center">Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="client-table-body" class="divide-y divide-white/5">
+                                    <!-- Generado dinámicamente desde MySQL -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ==============================================
+                     2. VISTA: FORMULARIO (ALTA / MODIFICACIÓN DE CLIENTE)
+                     ============================================== -->
+                <div id="view-client-form" class="view-section hidden-view max-w-4xl mx-auto animate-fade-in">
+                    
+                    <div class="mb-6 flex items-center gap-3">
+                        <button type="button" onclick="switchView('client-list')" class="text-slate-400 hover:text-cyan-400 transition-colors bg-white/5 p-2 rounded-xl border border-white/10 hover:bg-white/10" title="Volver al Listado">
+                            <i class="ph ph-arrow-left text-xl"></i>
+                        </button>
+                        <div>
+                            <h1 id="form-title" class="text-2xl font-bold text-white glow-text-cyan">Registrar Cliente</h1>
+                            <p id="form-subtitle" class="text-sm text-slate-400 mt-1">Completa los datos en el siguiente panel para guardarlos en MySQL.</p>
+                        </div>
+                    </div>
+
+                    <!-- Panel Principal del Formulario -->
+                    <div class="glass-panel rounded-2xl overflow-hidden mb-6">
+                        <form id="client-form-element" class="p-6 lg:p-8">
+                            <input type="hidden" id="form-client-id" value="">
+                            
+                            <!-- GRID de 2 Columnas -->
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                
+                                <!-- Columna Izquierda -->
+                                <div class="space-y-5">
+                                    <!-- Nombre / Razón Social -->
+                                    <div>
+                                        <label for="form-client-name" class="block text-sm font-medium text-slate-300 mb-1">Nombre Completo / Razón Social *</label>
+                                        <input type="text" id="form-client-name" required placeholder="Ej. Juan Pérez o Constructora Horizonte SRL" class="glass-input w-full px-4 py-2.5 rounded-xl text-sm">
+                                    </div>
+                                    
+                                    <!-- DNI / CUIT -->
+                                    <div>
+                                        <label for="form-client-dni" class="block text-sm font-medium text-slate-300 mb-1">DNI / CUIT (Único) *</label>
+                                        <input type="text" id="form-client-dni" required placeholder="Ej. 20-12345678-9 o 30-71234567-8" class="glass-input w-full px-4 py-2.5 rounded-xl text-sm">
+                                    </div>
+                                    
+                                    <!-- Correo Electrónico -->
+                                    <div>
+                                        <label for="form-client-email" class="block text-sm font-medium text-slate-300 mb-1">Correo Electrónico</label>
+                                        <input type="email" id="form-client-email" placeholder="contacto@cliente.com" class="glass-input w-full px-4 py-2.5 rounded-xl text-sm">
+                                    </div>
+                                    
+                                    <!-- Estado (Baja Lógica / Alta) -->
+                                    <div>
+                                        <label class="block text-sm font-medium text-slate-300 mb-2">Estado Inicial</label>
+                                        <div class="flex items-center gap-6">
+                                            <label class="flex items-center gap-2 cursor-pointer group">
+                                                <input type="radio" name="estado" value="Activo" checked class="w-4 h-4 text-emerald-500 focus:ring-emerald-500/50 bg-black/30 border-slate-500">
+                                                <span class="text-sm text-slate-300 group-hover:text-white transition-colors">Activo</span>
+                                            </label>
+                                            <label class="flex items-center gap-2 cursor-pointer group">
+                                                <input type="radio" name="estado" value="Inactivo" class="w-4 h-4 text-slate-500 focus:ring-slate-500/50 bg-black/30 border-slate-500">
+                                                <span class="text-sm text-slate-300 group-hover:text-white transition-colors">Inactivo</span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Columna Derecha -->
+                                <div class="space-y-5">
+                                    <!-- Tipo de Cliente -->
+                                    <div>
+                                        <label for="form-client-type" class="block text-sm font-medium text-slate-300 mb-1">Tipo de Cliente *</label>
+                                        <div class="relative">
+                                            <select id="form-client-type" required class="glass-input w-full px-4 py-2.5 rounded-xl appearance-none cursor-pointer text-sm">
+                                                <option value="Particular">Particular</option>
+                                                <option value="Corporativo">Corporativo / Empresa</option>
+                                            </select>
+                                            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4">
+                                                <i class="ph ph-caret-down text-slate-400"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Teléfono -->
+                                    <div>
+                                        <label for="form-client-phone" class="block text-sm font-medium text-slate-300 mb-1">Teléfono de Contacto</label>
+                                        <input type="tel" id="form-client-phone" placeholder="Ej. +54 9 341 555-0192" class="glass-input w-full px-4 py-2.5 rounded-xl text-sm">
+                                    </div>
+                                    
+                                    <!-- Dirección de Obra -->
+                                    <div>
+                                        <label for="form-client-address" class="block text-sm font-medium text-slate-300 mb-1">Dirección de Obra *</label>
+                                        <input type="text" id="form-client-address" required placeholder="Calle, Número, Piso, Localidad" class="glass-input w-full px-4 py-2.5 rounded-xl text-sm">
+                                    </div>
+                                </div>
+
+                                <!-- Ancho Completo: Observaciones -->
+                                <div class="md:col-span-2">
+                                    <label for="form-client-notes" class="block text-sm font-medium text-slate-300 mb-1">Observaciones / Requisitos de Aberturas</label>
+                                    <textarea id="form-client-notes" rows="3" placeholder="Detalles de la obra, líneas de aluminio preferidas (Módena, A30, Herrero), especificaciones de vidrio (DVH, Laminado)..." class="glass-input w-full px-4 py-3 rounded-xl resize-none text-sm"></textarea>
+                                </div>
+                            </div>
+
+                            <!-- Botones de Acción -->
+                            <div class="mt-8 pt-6 border-t border-white/10 flex items-center justify-end gap-4">
+                                <button type="button" onclick="switchView('client-list')" class="px-6 py-2.5 rounded-xl font-medium text-slate-300 bg-white/5 hover:bg-white/10 border border-white/10 transition-colors">
+                                    Cancelar
+                                </button>
+                                <button type="submit" id="btn-save-client" class="px-6 py-2.5 rounded-xl font-medium text-white bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 shadow-[0_0_15px_rgba(6,182,212,0.4)] flex items-center gap-2 transition-all glow-cyan">
+                                    <i class="ph ph-floppy-disk text-lg"></i>
+                                    <span id="btn-save-text">Guardar Cliente</span>
+                                    <div id="btn-save-loader" class="loader hidden"></div>
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- ==============================================
+                     3. VISTA: FICHA / HISTORIAL DEL CLIENTE
+                     ============================================== -->
+                <div id="view-client-profile" class="view-section hidden-view max-w-5xl mx-auto animate-fade-in">
+                    
+                    <div class="mb-6 flex items-center gap-3">
+                        <button onclick="switchView('client-list')" class="text-slate-400 hover:text-cyan-400 transition-colors bg-white/5 p-2 rounded-xl border border-white/10 hover:bg-white/10" title="Volver al Listado">
+                            <i class="ph ph-arrow-left text-xl"></i>
+                        </button>
+                        <div>
+                            <h1 class="text-2xl font-bold text-white glow-text-cyan">Ficha del Cliente</h1>
+                            <p class="text-sm text-slate-400 mt-1">Visualiza el perfil, obras y presupuestos vinculados.</p>
+                        </div>
+                    </div>
+
+                    <!-- Cabecera del Cliente -->
+                    <div class="glass-panel p-6 rounded-2xl flex flex-col sm:flex-row gap-6 items-start sm:items-center mb-6">
+                        <div id="profile-avatar" class="w-20 h-20 bg-cyan-500/20 border border-cyan-500/30 rounded-2xl flex items-center justify-center text-cyan-400 text-3xl font-bold flex-shrink-0 glow-cyan">
+                            CL
+                        </div>
+                        <div class="flex-1">
+                            <div class="flex items-center gap-3 mb-1">
+                                <h2 id="profile-name" class="text-xl font-bold text-white">Nombre del Cliente</h2>
+                                <span id="profile-badge" class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
+                                    Cliente Activo
+                                </span>
+                            </div>
+                            <p id="profile-cuit" class="text-slate-400 text-sm mb-3">CUIT: 30-00000000-0 • Corporativo</p>
+                            
+                            <div class="flex flex-wrap gap-x-6 gap-y-2 text-sm text-slate-300">
+                                <div class="flex items-center gap-1.5"><i class="ph ph-phone text-cyan-400"></i> <span id="profile-phone">--</span></div>
+                                <div class="flex items-center gap-1.5"><i class="ph ph-envelope-simple text-cyan-400"></i> <span id="profile-email">--</span></div>
+                                <div class="flex items-center gap-1.5"><i class="ph ph-map-pin text-cyan-400"></i> <span id="profile-address">--</span></div>
+                            </div>
+                        </div>
+                        <button id="btn-edit-from-profile" class="w-full sm:w-auto px-4 py-2 border border-white/20 rounded-xl text-sm font-medium text-white bg-white/5 hover:bg-white/10 flex items-center justify-center gap-2 transition-colors">
+                            <i class="ph ph-pencil-simple text-lg"></i> Modificar Datos
+                        </button>
+                    </div>
+
+                    <!-- Presupuestos Asociados al Cliente -->
+                    <div class="glass-panel rounded-2xl overflow-hidden flex flex-col">
+                        <div class="border-b border-white/10 flex overflow-x-auto bg-black/20">
+                            <button class="px-6 py-4 text-sm font-bold text-cyan-400 border-b-2 border-cyan-400 whitespace-nowrap bg-cyan-500/10">
+                                Presupuestos de Aberturas
+                            </button>
+                            <button onclick="showToast('Historial completo disponible en Presupuestos', 'info')" class="px-6 py-4 text-sm font-medium text-slate-400 hover:text-white whitespace-nowrap transition-colors">
+                                Órdenes de Trabajo en Fábrica
+                            </button>
+                        </div>
+                        
+                        <div class="divide-y divide-white/5">
+                            <div class="p-6 hover:bg-white/5 transition-colors flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                                <div>
+                                    <div class="flex items-center gap-3 mb-1">
+                                        <h3 class="font-semibold text-white">Presupuesto #0045 - Ventanas Línea Módena</h3>
+                                        <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">
+                                            Aprobado
+                                        </span>
+                                    </div>
+                                    <p class="text-sm text-slate-400">Carpintería de aluminio anodizado natural con DVH 4+12+4</p>
+                                </div>
+                                <div class="text-left sm:text-right">
+                                    <p class="font-bold text-white mb-1">$ 450.000,00</p>
+                                    <span class="text-xs text-slate-400">Cotización oficial</span>
+                                </div>
+                            </div>
+
+                            <div class="p-6 hover:bg-white/5 transition-colors flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                                <div>
+                                    <div class="flex items-center gap-3 mb-1">
+                                        <h3 class="font-semibold text-white">Presupuesto #0042 - Cerramiento Balcón A30</h3>
+                                        <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-amber-500/20 text-amber-400 border border-amber-500/30">
+                                            Pendiente
+                                        </span>
+                                    </div>
+                                    <p class="text-sm text-slate-400">4 Hojas corredizas perfilería pesada negro micropulverizado</p>
+                                </div>
+                                <div class="text-left sm:text-right">
+                                    <p class="font-bold text-white mb-1">$ 820.000,00</p>
+                                    <span class="text-xs text-slate-400">Pendiente de seña</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="h-12"></div>
+            </main>
+        </div>
+    </div>
+
+    <!-- ==============================================
+         MODAL DE CONFIRMACIÓN PARA BAJA LÓGICA
+         ============================================== -->
+    <div id="modal-baja-logica" class="fixed inset-0 z-50 flex items-center justify-center p-4 hidden">
+        <div class="absolute inset-0 bg-slate-900/80 backdrop-blur-sm" id="modal-baja-overlay"></div>
+        <div class="glass-panel w-full max-w-md p-6 rounded-2xl relative z-10 border border-amber-500/40 shadow-2xl">
+            <div class="flex items-start gap-4 mb-4">
+                <div class="w-12 h-12 rounded-full bg-amber-500/20 text-amber-400 flex items-center justify-center text-2xl flex-shrink-0">
+                    <i class="ph ph-warning"></i>
+                </div>
+                <div>
+                    <h3 id="modal-baja-titulo" class="text-lg font-bold text-white">¿Inactivar Cliente?</h3>
+                    <p id="modal-baja-desc" class="text-sm text-slate-300 mt-1">
+                        Se cambiará el estado del cliente sin borrarlo de la base de datos (baja lógica).
+                    </p>
+                </div>
+            </div>
+            <div class="flex justify-end gap-3 mt-6">
+                <button type="button" id="btn-cancelar-baja" class="px-4 py-2.5 rounded-xl text-sm font-medium text-slate-300 bg-white/5 hover:bg-white/10 border border-white/10 transition-colors">
+                    Cancelar
+                </button>
+                <button type="button" id="btn-confirmar-baja" class="px-5 py-2.5 rounded-xl text-sm font-medium text-white bg-amber-600 hover:bg-amber-500 transition-colors shadow-lg">
+                    Confirmar Cambio
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==============================================
+         MODAL DE CONFIRMACIÓN PARA ELIMINAR CLIENTE
+         ============================================== -->
+    <div id="modal-eliminar-cliente" class="fixed inset-0 z-50 flex items-center justify-center p-4 hidden">
+        <div class="absolute inset-0 bg-slate-900/80 backdrop-blur-sm" onclick="cerrarModalEliminar()"></div>
+        <div class="glass-panel w-full max-w-md p-6 rounded-2xl relative z-10 border border-red-500/40 shadow-2xl">
+            <div class="flex items-start gap-4 mb-4">
+                <div class="w-12 h-12 rounded-full bg-red-500/20 text-red-400 flex items-center justify-center text-2xl flex-shrink-0">
+                    <i class="ph ph-trash"></i>
+                </div>
+                <div>
+                    <h3 class="text-lg font-bold text-white">¿Eliminar Cliente?</h3>
+                    <p id="modal-eliminar-desc" class="text-sm text-slate-300 mt-1">
+                        Esta acción borrará el registro de la base de datos de MySQL.
+                    </p>
+                </div>
+            </div>
+            <div class="flex justify-end gap-3 mt-6">
+                <button type="button" onclick="cerrarModalEliminar()" class="px-4 py-2.5 rounded-xl text-sm font-medium text-slate-300 bg-white/5 hover:bg-white/10 border border-white/10 transition-colors">
+                    Cancelar
+                </button>
+                <button type="button" id="btn-confirmar-eliminar" class="px-5 py-2.5 rounded-xl text-sm font-medium text-white bg-red-600 hover:bg-red-500 transition-colors shadow-[0_0_15px_rgba(239,68,68,0.4)]">
+                    Sí, Eliminar de MySQL
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script type="module" src="./controladores/nav-autenticacion.js"></script>
+    <script type="module" src="./controladores/clientes-controlador.js"></script>
+</body>
+</html>
